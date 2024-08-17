@@ -4,7 +4,7 @@ from typing import Optional
 from sqlalchemy import ForeignKey, Engine, create_engine, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
 
-from utils import BorderInfo
+from src.utils import BorderInfo
 
 
 class Base(DeclarativeBase): pass

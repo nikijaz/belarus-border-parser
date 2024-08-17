@@ -4,8 +4,8 @@ import requests
 from sqlalchemy import Engine, select
 from sqlalchemy.orm import Session
 
-from db import Border, VehicleType, LicensePlate, Crossing
-from utils import BorderInfo, get_queue, CrossingInfo
+from src.db import Border, VehicleType, LicensePlate, Crossing
+from src.utils import BorderInfo, get_queue, CrossingInfo
 
 
 def gather(engine: Engine, borders_info: list[BorderInfo], vehicle_types: list[str]):

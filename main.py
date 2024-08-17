@@ -3,9 +3,9 @@ import time
 import requests
 from sqlalchemy import Engine
 
-from db import init_db_connection, init_db
-from gather import gather
-from utils import get_borders_info, BorderInfo
+from src.db import init_db_connection, init_db
+from src.gather import gather
+from src.utils import get_borders_info, BorderInfo
 
 
 def main():
