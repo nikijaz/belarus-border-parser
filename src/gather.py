@@ -30,7 +30,12 @@ def gather(engine: Engine, borders_info: list[BorderInfo], vehicle_types: list[s
                 LicensePlate.value == entry.license_plate
             ))
             if not license_plate:
-                license_plate = LicensePlate(value=entry.license_plate)
+                license_plate = LicensePlate(
+                    value=entry.license_plate,
+                    vehicle_type=session.scalar(select(VehicleType).where(
+                        VehicleType.name == entry.vehicle_type
+                    ))
+                )
                 session.add(license_plate)
 
             if not session.scalar(select(Crossing).where(
@@ -42,9 +47,6 @@ def gather(engine: Engine, borders_info: list[BorderInfo], vehicle_types: list[s
                         Border.uuid == border_info.uuid
                     )),
                     license_plate=license_plate,
-                    vehicle_type=session.scalar(select(VehicleType).where(
-                        VehicleType.name == entry.vehicle_type
-                    )),
                     priority=entry.priority,
                     arrived_at=entry.arrived_at
                 ))

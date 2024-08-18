@@ -24,7 +24,7 @@ class VehicleType(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(unique=True)
-    crossings: Mapped[list["Crossing"]] = relationship(back_populates="vehicle_type")
+    license_plates: Mapped[list["LicensePlate"]] = relationship(back_populates="vehicle_type")
 
 
 class LicensePlate(Base):
@@ -32,6 +32,8 @@ class LicensePlate(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     value: Mapped[str] = mapped_column(unique=True)
+    vehicle_type_id: Mapped[int] = mapped_column(ForeignKey("vehicle_types.id"))
+    vehicle_type: Mapped["VehicleType"] = relationship(back_populates="license_plates")
     crossings: Mapped[list["Crossing"]] = relationship(back_populates="license_plate")
 
 
@@ -43,8 +45,6 @@ class Crossing(Base):
     border: Mapped["Border"] = relationship(back_populates="crossings")
     license_plate_id: Mapped[int] = mapped_column(ForeignKey("license_plates.id"))
     license_plate: Mapped["LicensePlate"] = relationship(back_populates="crossings")
-    vehicle_type_id: Mapped[int] = mapped_column(ForeignKey("vehicle_types.id"))
-    vehicle_type: Mapped["VehicleType"] = relationship(back_populates="crossings")
     priority: Mapped[bool]
     arrived_at: Mapped[datetime]
     left_at: Mapped[Optional[datetime]]
