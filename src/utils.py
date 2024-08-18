@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 
@@ -59,7 +59,7 @@ def get_queue(border_uuid: str, vehicle_types: list[str]) -> list[CrossingInfo]:
                 license_plate=entry.get("regnum"),
                 vehicle_type=vehicle_type,
                 priority=priority,
-                arrived_at=datetime.strptime(entry.get("registration_date"), "%H:%M:%S %d.%m.%Y")
+                arrived_at=datetime.strptime(entry.get("registration_date"), "%H:%M:%S %d.%m.%Y") - timedelta(hours=3)
             ) for entry in queue])
 
     return result
