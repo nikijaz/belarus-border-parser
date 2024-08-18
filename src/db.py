@@ -1,7 +1,8 @@
+import os
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import ForeignKey, Engine, create_engine, select
+from sqlalchemy import ForeignKey, Engine, create_engine, select, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
 
 from src.utils import BorderInfo
@@ -14,8 +15,8 @@ class Border(Base):
     __tablename__ = "borders"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    uuid: Mapped[str] = mapped_column(unique=True)
-    name: Mapped[str] = mapped_column(unique=True)
+    uuid: Mapped[str] = mapped_column(String(36), unique=True)
+    name: Mapped[str] = mapped_column(String(24), unique=True)
     crossings: Mapped[list["Crossing"]] = relationship(back_populates="border")
 
 
@@ -23,7 +24,7 @@ class VehicleType(Base):
     __tablename__ = "vehicle_types"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(unique=True)
+    name: Mapped[str] = mapped_column(String(24), unique=True)
     license_plates: Mapped[list["LicensePlate"]] = relationship(back_populates="vehicle_type")
 
 
@@ -31,7 +32,7 @@ class LicensePlate(Base):
     __tablename__ = "license_plates"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    value: Mapped[str] = mapped_column(unique=True)
+    value: Mapped[str] = mapped_column(String(10), unique=True)
     vehicle_type_id: Mapped[int] = mapped_column(ForeignKey("vehicle_types.id"))
     vehicle_type: Mapped["VehicleType"] = relationship(back_populates="license_plates")
     crossings: Mapped[list["Crossing"]] = relationship(back_populates="license_plate")
@@ -51,7 +52,7 @@ class Crossing(Base):
 
 
 def init_db_connection() -> Engine:
-    engine: Engine = create_engine("sqlite:///sqlite.db")
+    engine: Engine = create_engine(os.getenv("DATABASE_URL", "sqlite:///sqlite.db"))
     engine.connect()
     Base.metadata.create_all(engine)
 
